@@ -1,0 +1,25 @@
+ button{
+     width: 65px;
+     height: 30px;
+     border: 1px solid black;
+     /* align-self: center; */
+     text-align: center;
+     color: black;
+     background-color:white;
+ }
+ button:hover {
+    background-color: yellow;
+  }
+
+.tablestyle{
+    width: auto;
+    border: 5px solid grey;
+    /* border-radius: 5mm; */
+    align-self: center;
+
+}
+.operator{
+    background-color: orangered;
+}
+
+
