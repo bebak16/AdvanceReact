@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './CalculatorAdv.css'
-var flag = 0;
+
 class CalculatorAdv extends Component {
     constructor(props) {
         super(props);
@@ -12,11 +12,11 @@ class CalculatorAdv extends Component {
     buttonhandler = (ab) => {
        
         if (ab === '=')
-        {  flag = 1;
+        {
             try 
             {   this.setState((prevState) => ({
                 values: eval(prevState.values)
-               }),()=>{ 
+               }),()=> { 
                 if(this.state.values == "Infinity"){
                 this.setState({ values : 'Math Error'})
                }})  
@@ -26,12 +26,12 @@ class CalculatorAdv extends Component {
             }
         }
         else {
-            if(flag === 1){
-                this.setState({
-                    values: ''
-                })
-                flag = 0;
-            }
+            // if(flag === 1){
+            //     this.setState({
+            //         values: ''
+            //     })
+            //     flag = 0;
+            // }
             this.setState((prevState) => ({
                 values: prevState.values + ab,
             }))
@@ -56,7 +56,10 @@ class CalculatorAdv extends Component {
                     <table className='tablestyle'>
                         <tbody>
                             <tr><th colSpan='4' style={{borderBottom: '5px solid grey',backgroundColor: 'darkslategray', color: 'white' }}>Simple Calculator</th></tr>
-                            <tr><th colSpan='4' style={{borderBottom: '5px solid grey'}}><input id = 'result' style ={{ width:'100%', boxSizing: 'border-box'}} value={this.state.values || 0} readOnly /></th></tr>
+                            <tr><th colSpan='4' style={{borderBottom: '5px solid grey'}}>
+                            <input id = 'result' style ={{ width:'100%', boxSizing: 'border-box'}} 
+                            value={this.state.values || 0} readOnly />
+                            </th></tr>
                             <tr>
                                 <td><button id = 'clear' onClick={this.clearHandler}>AC</button> </td>
                                 <td><button id = 'delete' onClick={this.clearwordHandler}>DELETE</button> </td> 
