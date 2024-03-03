@@ -11,7 +11,6 @@ const SearchForm = () => {
   const searchCocktail = () => {
     setSearchTerms(searchValue.current.value);
     setClearBtn(searchValue.current.value.length);
-    console.log("value of clearButton is " + clearBtn);
   };
 
   const clearHandler = () => {

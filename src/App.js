@@ -7,11 +7,15 @@ import BirthdayApp from "./BirthdayPage/BirthdayApp";
 import Pokemons from "./PokemonDetails/Pokemons";
 import DrawerList from "./utils/DrawerList";
 import SingleCocktail from "./MocktailPage/pages/SingleCocktail";
+import Navbar from "./utils/Navbar";
 // import BasicQuizApp from "./BasicQuiz/BasicQuizApp";
 
 const App = () => {
   return (
-    <body>
+    <div>
+      <nav>
+        <Navbar />
+      </nav>
       <div style={{ display: "flex" }}>
         <DrawerList />
         <main>
@@ -28,7 +32,7 @@ const App = () => {
           </Routes>
         </main>
       </div>
-    </body>
+    </div>
   );
 };
 

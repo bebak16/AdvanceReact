@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const url = "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=";
 const AppContext = React.createContext();
@@ -14,9 +15,23 @@ const getLocalStorage = () => {
 };
 
 const AppProvider = ({ children }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(true);
   const [searchTerms, setSearchTerms] = useState("a");
   const [cocktails, setCocktails] = useState(getLocalStorage);
+
+  const currentPath = location?.pathname.replace("/", "");
+  const [path, setPath] = React.useState(currentPath);
+
+  useEffect(() => {
+    if (path) {
+      navigate(path);
+    } else {
+      navigate("/");
+    }
+  }, [path]);
 
   const fetchDrinks = async () => {
     setLoading(true);
@@ -59,6 +74,8 @@ const AppProvider = ({ children }) => {
         loading,
         cocktails,
         setSearchTerms,
+        path,
+        setPath,
       }}
     >
       {children}

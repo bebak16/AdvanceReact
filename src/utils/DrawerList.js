@@ -1,12 +1,11 @@
 import * as React from "react";
 import List from "@mui/material/List";
-import ListSubheader from "@mui/material/ListSubheader";
 import Divider from "@mui/material/Divider";
 import Switch from "@mui/material/Switch";
-import { useNavigate, useLocation } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import { useGlobalContext } from "../context";
 
 const styles = {
   page: {
@@ -36,20 +35,13 @@ const components = {
 };
 
 const DrawerList = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const currentPath = location?.pathname.replace("/", "");
-  const [checked, setChecked] = React.useState(currentPath);
+  const { path, setPath } = useGlobalContext();
 
   const handleToggle = (nav) => () => {
-    debugger;
-    if (checked === nav) {
-      setChecked("");
-      navigate("/");
+    if (path === nav) {
+      setPath("");
     } else {
-      setChecked(nav);
-      navigate(`/${nav}`);
+      setPath(nav);
     }
   };
 
@@ -72,7 +64,7 @@ const DrawerList = () => {
               <Switch
                 edge="end"
                 onChange={handleToggle(itr)}
-                checked={checked === itr}
+                checked={path === itr}
                 inputProps={{
                   "aria-labelledby": `${itr}`,
                 }}

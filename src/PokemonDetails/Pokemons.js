@@ -14,8 +14,6 @@ const Pokemons = () => {
       const result = pokemonResponse.data.results;
       setPokemonNameList(result.map((itr) => itr.name));
 
-      console.log(result.map((itr) => itr.name));
-
       const abilitiesURLs = result.map((itr) => itr.url);
 
       const abilitiesPromises = abilitiesURLs.map((url) => axios.get(url));
@@ -29,8 +27,6 @@ const Pokemons = () => {
       });
 
       setPokemonAbilitiesList(abilitiesData);
-      debugger;
-      console.log("pokemonAbilitiesList", abilitiesData);
     } catch (error) {
       console.log("Error loading data");
     }
