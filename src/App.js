@@ -3,7 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import CalculatorAdv from "./Calculator/CalculatorAdv";
 import MocktailApp from "./MocktailPage/MocktailApp";
 import TourApp from "./TourPage/TourApp";
-import BirthdayApp from "./BirthdayPage/BirthdayApp";
+import Notes from "./Notes/Notes";
+// import ImportantNotes from "./BirthdayPage/BirthdayApp";
 import Pokemons from "./PokemonDetails/Pokemons";
 import DrawerList from "./utils/DrawerList";
 import SingleCocktail from "./MocktailPage/pages/SingleCocktail";
@@ -23,7 +24,8 @@ const App = () => {
           <Routes>
             <Route exact path="/" element={<CalculatorAdv />} />
             <Route exact path="/CalculatorAdv" element={<CalculatorAdv />} />
-            <Route path="/BirthdayPage" element={<BirthdayApp />} />
+            <Route path="/Notes" element={<Notes />} />
+            {/* <Route path="/ImportantNotes" element={<ImportantNotes />} /> */}
             <Route path="/MocktailApp" element={<MocktailApp />} />
             <Route path="/MocktailApp/:id" element={<SingleCocktail />} />
             <Route path="/Pokemons" element={<Pokemons />} />

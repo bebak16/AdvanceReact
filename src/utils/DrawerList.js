@@ -28,7 +28,7 @@ const styles = {
 
 const components = {
   CalculatorAdv: "Advance Calculator",
-  BirthdayPage: "Employees Birthdate",
+  Notes: "Employees Birthdate",
   MocktailApp: "Mocktails Info",
   Pokemons: "Pokemon Abilities",
   TourApp: "Tour Guide",
