@@ -59,7 +59,9 @@ function Notes() {
 
   const addNoteToList = () => {
     const newId = Math.floor(Math.random() * 1000);
-    const noteValues = { id: newId, text: textValue, checked: false}
+    const listDate = new Date();
+    const todayDate = `${listDate.getDate()}-${listDate.getMonth() + 1}-${listDate.getFullYear()}`;
+    const noteValues = { id: newId, text: textValue, checked: false, date: todayDate}
 
     if (textValue) {
       setNoteList(prev => [...prev, noteValues])
@@ -112,6 +114,7 @@ function Notes() {
               <TableRow>
                 <TableCell>ID</TableCell>
                 <TableCell>Note</TableCell>
+                <TableCell>Date</TableCell>
                 <TableCell>Done</TableCell>
                 <TableCell>Delete</TableCell>
               </TableRow>
@@ -126,6 +129,7 @@ function Notes() {
                   <TableCell component="th" scope="row" style={styles.noteCell}>
                     {note.text}
                   </TableCell>
+                  <TableCell>{note.date}</TableCell>
                   <TableCell>
                   <Checkbox
                     checked={note.checked}
