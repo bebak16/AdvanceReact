@@ -17,15 +17,12 @@ const app = initializeApp(firebaseConfig);
 
 const useFireBase = () => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     const fetchData = async () => {
         const dbRef = ref(getDatabase(app));
 
           get(child(dbRef, `notes`)).then((snapshot) => {
-            debugger;
             if (snapshot.exists()){
               console.log("data comes", snapshot.val());
               const dbData = snapshot.val()?.noteList;
@@ -37,7 +34,6 @@ const useFireBase = () => {
           }).catch((error) => {
             console.error(error);
           });
-          setLoading(false);
         };
     fetchData();
   }, []);
@@ -45,15 +41,13 @@ const useFireBase = () => {
   const updateList = async (noteList) => {
     const db = getDatabase(app);
     try {
-      debugger;
       await set(ref(db, 'notes/'), { noteList });
-      await alert("Data successfully saved");
     } catch (error) {
       console.error('Error writing data:', error);
     }
   };
   
-  return { data, loading, updateList };
+  return { data, updateList };
 };
 
 export default useFireBase;

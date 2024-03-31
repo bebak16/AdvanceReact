@@ -4,6 +4,8 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -29,7 +31,7 @@ const styles = {
   },
 
   noteCell: {
-    minWidth: "10em"
+    minWidth: "15em"
   },
   saveBtn: {
     width: "10em",
@@ -39,12 +41,15 @@ const styles = {
 
 }
 
+const MSG = "Please save changes after updating Notes.";
 
 function Notes() {
   const [noteList, setNoteList] = useState([]);
   const [textValue, setTextValue] = useState("");
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState(MSG);
 
-  const { data, loading, updateList } = useFireBase();
+  const { data, updateList } = useFireBase();
 
   useEffect(() => {
     if(data) 
@@ -67,6 +72,7 @@ function Notes() {
       setNoteList(prev => [...prev, noteValues])
     }
     setTextValue("");
+    handleSnackbarClick();
   }
 
   const handleCheckBox = (checkedId) => {
@@ -75,12 +81,32 @@ function Notes() {
       return itr;
     })
     setNoteList(checkedList);
+    handleSnackbarClick();
   }
 
   const handleDelete = (deleteId) => {
     const newList = noteList.filter(itr => itr.id !== deleteId)
     setNoteList(newList);
+    handleSnackbarClick();
   }
+
+  const saveNotes = () => {
+    updateList(noteList);
+    setMessage("Notes Saved Successfully!")
+    handleSnackbarClick();
+  }
+
+  const handleSnackbarClick = () => {
+    setOpen(true);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+    setMessage(MSG);
+  };
 
   return (
     <main>
@@ -100,20 +126,19 @@ function Notes() {
         </Button>
         <Button 
           variant="contained" 
-          onClick={() => updateList(noteList)} 
+          onClick={saveNotes} 
           color="success"
           style={styles.saveBtn}
         >
           Save Notes
         </Button>
-        <h2> My Notes</h2>
-        { loading && <h4>Loading...</h4> }
+        <h2>My Notes</h2>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
-                <TableCell>Note</TableCell>
+                <TableCell style={styles.noteCell}>Note</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Done</TableCell>
                 <TableCell>Delete</TableCell>
@@ -147,6 +172,18 @@ function Notes() {
           </Table>
         </TableContainer>
       </section>
+      <Snackbar open={open} autoHideDuration={4000} onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical : "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+         {message}
+        </Alert>
+      </Snackbar>
     </main>
   );
 }
