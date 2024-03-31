@@ -2,6 +2,7 @@ import * as React from "react";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Switch from "@mui/material/Switch";
+import Drawer from "@mui/material/Drawer";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -28,7 +29,8 @@ const styles = {
 
 const components = {
   CalculatorAdv: "Advance Calculator",
-  Notes: "Employees Birthdate",
+  Notes: "Vivek Notes",
+  MyLogs: "Vivek Day Logs",
   MocktailApp: "Mocktails Info",
   Pokemons: "Pokemon Abilities",
   TourApp: "Tour Guide",
@@ -54,7 +56,10 @@ const DrawerList = () => {
         >
           {Object.keys(components).map((itr, index) => (
             <ListItem key={index}>
-              <ListItemButton style={styles.listButton}>
+              <ListItemButton
+                style={styles.listButton}
+                onClick={handleToggle(itr)}
+              >
                 <ListItemText
                   style={styles.listText}
                   primary={itr}

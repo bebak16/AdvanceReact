@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Cards from "react-credit-cards-2";
-import "react-credit-cards-2/dist/es/styles-compiled.css";
+// import Cards from "react-credit-cards-2";
 
 function CreditCard() {
   const [cardNumber, setCardNumber] = useState("");
@@ -11,13 +10,13 @@ function CreditCard() {
 
   return (
     <div>
-      <Cards
+      {/* <Cards
         number={cardNumber}
         name={name}
         expiry={expiry}
         cvc={cvv}
         focused={focus}
-      />
+      /> */}
       <form className="form">
         <input
           type="tel"

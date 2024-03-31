@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, child, get, set } from "firebase/database";
 
@@ -9,44 +9,46 @@ const firebaseConfig = {
   projectId: "image-gen-ai-8063a",
   storageBucket: "image-gen-ai-8063a.appspot.com",
   messagingSenderId: "340548083956",
-  appId: "1:340548083956:web:a29a8120a00dde0441bea1"
+  appId: "1:340548083956:web:a29a8120a00dde0441bea1",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-const useFireBase = () => {
+const useFireBase = (props) => {
   const [data, setData] = useState([]);
+  const dataTable = props === "logs" ? "logs" : "notes";
 
   useEffect(() => {
     const fetchData = async () => {
-        const dbRef = ref(getDatabase(app));
+      const dbRef = ref(getDatabase(app));
 
-          get(child(dbRef, `notes`)).then((snapshot) => {
-            if (snapshot.exists()){
-              console.log("data comes", snapshot.val());
-              const dbData = snapshot.val()?.noteList;
-             setData(dbData);
-            }
-            else {
-              console.log("no data error");
-            }
-          }).catch((error) => {
-            console.error(error);
-          });
-        };
+      get(child(dbRef, dataTable))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            console.log("data comes", snapshot.val());
+            const dbData = snapshot.val()?.dataList;
+            setData(dbData);
+          } else {
+            console.log("no data error");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
     fetchData();
   }, []);
 
-  const updateList = async (noteList) => {
+  const updateList = async (dataList) => {
     const db = getDatabase(app);
     try {
-      await set(ref(db, 'notes/'), { noteList });
+      await set(ref(db, `${dataTable}/`), { dataList });
     } catch (error) {
-      console.error('Error writing data:', error);
+      console.error("Error writing data:", error);
     }
   };
-  
+
   return { data, updateList };
 };
 

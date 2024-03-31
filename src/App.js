@@ -4,7 +4,7 @@ import CalculatorAdv from "./Calculator/CalculatorAdv";
 import MocktailApp from "./MocktailPage/MocktailApp";
 import TourApp from "./TourPage/TourApp";
 import Notes from "./Notes/Notes";
-// import ImportantNotes from "./BirthdayPage/BirthdayApp";
+import MyLogs from "./MyLogs/MyLogs";
 import Pokemons from "./PokemonDetails/Pokemons";
 import DrawerList from "./utils/DrawerList";
 import SingleCocktail from "./MocktailPage/pages/SingleCocktail";
@@ -25,7 +25,7 @@ const App = () => {
             <Route exact path="/" element={<CalculatorAdv />} />
             <Route exact path="/CalculatorAdv" element={<CalculatorAdv />} />
             <Route path="/Notes" element={<Notes />} />
-            {/* <Route path="/ImportantNotes" element={<ImportantNotes />} /> */}
+            <Route path="/MyLogs" element={<MyLogs />} />
             <Route path="/MocktailApp" element={<MocktailApp />} />
             <Route path="/MocktailApp/:id" element={<SingleCocktail />} />
             <Route path="/Pokemons" element={<Pokemons />} />
