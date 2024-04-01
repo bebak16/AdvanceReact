@@ -9,6 +9,7 @@ import Alert from "@mui/material/Alert";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import moment from "moment";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
@@ -20,22 +21,24 @@ const styles = {
     margin: "20px 30px",
   },
 
-  button: {
-    width: "10em",
-    height: "4em",
+  input: {
+    width: "20em",
   },
 
-  input: {
-    width: "30em",
+  inputDate: {
+    width: "8em",
+    marginLeft: "20px",
   },
 
   noteCell: {
     minWidth: "15em",
   },
-  saveBtn: {
-    width: "10em",
+
+  button: {
+    width: "8em",
     height: "4em",
-    marginLeft: "4em",
+    fontSize: "12px",
+    marginLeft: "2em",
   },
 };
 
@@ -46,6 +49,8 @@ function MyLogs() {
   const [textValue, setTextValue] = useState("");
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState(MSG);
+  const todayDate = moment(new Date()).format("DD/MM/YYYY");
+  const [dateValue, setDateValue] = useState(todayDate);
 
   const { data, updateList } = useFireBase("logs");
 
@@ -57,23 +62,27 @@ function MyLogs() {
     const value = e.target.value;
     setTextValue(value);
   };
+  const handleDateChange = (e) => {
+    const date = e.target.value;
+    setDateValue(date);
+  };
 
   const addNoteToList = () => {
     const newId = Math.floor(Math.random() * 1000);
-    const listDate = new Date();
-    const todayDate = `${listDate.getDate()}-${
-      listDate.getMonth() + 1
-    }-${listDate.getFullYear()}`;
-
     const noteValues = {
       id: newId,
       text: textValue,
       checked: false,
-      date: todayDate,
+      date: dateValue,
     };
 
     if (textValue) {
-      setLogsList((prev) => [...prev, noteValues]);
+      const newLogsList = [...logsList, noteValues];
+      newLogsList.sort((a, b) => new Date(a.date) - new Date(b.date));
+      setLogsList(newLogsList);
+    } else {
+      setMessage("Please enter the logs/details.");
+      setOpen(true);
     }
     setTextValue("");
     handleSnackbarClick();
@@ -115,32 +124,42 @@ function MyLogs() {
   return (
     <main>
       <section style={styles.section}>
-        <TextField
-          id="outlined-basic"
-          label="Add a new log to list"
-          variant="outlined"
-          multiline
-          value={textValue}
-          onChange={handleInputChange}
-          style={styles.input}
-          autoFocus
-        />
-        <Button
-          variant="contained"
-          onClick={addNoteToList}
-          color="success"
-          style={styles.button}
-        >
-          Add Log
-        </Button>
-        <Button
-          variant="contained"
-          onClick={saveNotes}
-          color="success"
-          style={styles.saveBtn}
-        >
-          Save Logs
-        </Button>
+        <div>
+          <TextField
+            id="outlined-basic"
+            label="Add a new log to list"
+            variant="outlined"
+            multiline
+            value={textValue}
+            onChange={handleInputChange}
+            style={styles.input}
+            autoFocus
+          />
+          <TextField
+            id="date-field"
+            label="Add a date"
+            variant="outlined"
+            value={dateValue}
+            onChange={handleDateChange}
+            style={styles.inputDate}
+          />
+          <Button
+            variant="contained"
+            onClick={addNoteToList}
+            color="success"
+            style={styles.button}
+          >
+            Add Log
+          </Button>
+          <Button
+            variant="contained"
+            onClick={saveNotes}
+            color="success"
+            style={styles.button}
+          >
+            Save Logs
+          </Button>
+        </div>
         <h2>My Logs</h2>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
