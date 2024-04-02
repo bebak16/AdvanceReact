@@ -5,6 +5,9 @@ import TableCell from "@mui/material/TableCell";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import Alert from "@mui/material/Alert";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
@@ -73,6 +76,7 @@ function MyLogs() {
       id: newId,
       text: textValue,
       checked: false,
+      gmail: 0,
       date: dateValue,
     };
 
@@ -91,6 +95,15 @@ function MyLogs() {
   const handleCheckBox = (checkedId) => {
     const checkedList = logsList.map((itr) => {
       if (itr.id === checkedId) itr.checked = !itr.checked;
+      return itr;
+    });
+    setLogsList(checkedList);
+    handleSnackbarClick();
+  };
+
+  const handleIDChange = (gmailId, value) => {
+    const checkedList = logsList.map((itr) => {
+      if (itr.id === gmailId) itr.gmail = value;
       return itr;
     });
     setLogsList(checkedList);
@@ -165,9 +178,10 @@ function MyLogs() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
+                <TableCell>SN</TableCell>
                 <TableCell style={styles.noteCell}>Log</TableCell>
                 <TableCell>Date</TableCell>
+                <TableCell>ID</TableCell>
                 <TableCell>Done</TableCell>
                 <TableCell>Delete</TableCell>
               </TableRow>
@@ -183,6 +197,26 @@ function MyLogs() {
                     {note.text}
                   </TableCell>
                   <TableCell>{note.date}</TableCell>
+                  <TableCell>
+                    <FormControl
+                      variant="standard"
+                      sx={{ m: 1, minWidth: 120 }}
+                      size="small"
+                    >
+                      <Select
+                        labelId="demo-select-small-label"
+                        id="demo-select-small"
+                        value={note.gmail}
+                        label="Gmail id"
+                        onChange={(e) =>
+                          handleIDChange(note.id, e.target.value)
+                        }
+                      >
+                        <MenuItem value={0}>vats</MenuItem>
+                        <MenuItem value={1}>rai</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </TableCell>
                   <TableCell>
                     <Checkbox
                       checked={note.checked}
