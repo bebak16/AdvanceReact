@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar style={{ marginLeft: "4em"}}>
           <Button color="inherit" onClick={() => setPath("")}>
             Home
           </Button>

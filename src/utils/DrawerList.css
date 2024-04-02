@@ -1,0 +1,34 @@
+/* Define styles for desktop */
+.left-menu {
+    width: 250px;
+    background-color: #f0f0f0;
+    transition: transform 0.3s ease;
+  }
+  
+  /* Define styles for mobile devices (e.g., screens smaller than 768px) */
+  @media only screen and (max-width: 768px) {
+    .left-menu {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #f0f0f0;
+      transition: left 0.3s ease;
+    }
+  
+    .left-menu.open {
+      left: 0;
+      z-index: 2;
+    }
+  }
+  
+  .side-icon {
+    position: absolute;
+    top: 14px;
+    left: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 3;
+  }
+  

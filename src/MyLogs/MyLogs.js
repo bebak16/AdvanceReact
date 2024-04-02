@@ -20,12 +20,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import useFireBase from "../utils/useFireBase";
 
 const styles = {
-  section: {
-    margin: "20px 30px",
-  },
 
   input: {
-    width: "20em",
+    width: "50%",
   },
 
   inputDate: {
@@ -38,7 +35,7 @@ const styles = {
   },
 
   button: {
-    width: "8em",
+    width: "9em",
     height: "4em",
     fontSize: "12px",
     marginLeft: "2em",
@@ -147,8 +144,8 @@ function MyLogs() {
   };
 
   return (
-    <main>
-      <section style={styles.section}>
+    <div>
+      <section>
         <div>
           <TextField
             id="outlined-basic"
@@ -270,7 +267,7 @@ function MyLogs() {
           {message}
         </Alert>
       </Snackbar>
-    </main>
+    </div>
   );
 }
 

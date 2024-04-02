@@ -19,7 +19,7 @@ const App = () => {
       </nav>
       <div style={{ display: "flex" }}>
         <DrawerList />
-        <main>
+        <main style={{ margin: "1em" }}>
           <h2>React Advance Components Home Page</h2>
           <Routes>
             <Route exact path="/" element={<CalculatorAdv />} />
