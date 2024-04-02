@@ -30,7 +30,7 @@ const styles = {
 const components = {
   CalculatorAdv: "Advance Calculator",
   Notes: "Vivek Notes",
-  MyLogs: "Vivek Day Logs",
+  Logs: "Vivek Logs",
   MocktailApp: "Mocktails Info",
   Pokemons: "Pokemon Abilities",
   TourApp: "Tour Guide",

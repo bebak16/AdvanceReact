@@ -77,6 +77,7 @@ function MyLogs() {
       text: textValue,
       checked: false,
       gmail: 0,
+      comments: "",
       date: dateValue,
     };
 
@@ -108,6 +109,17 @@ function MyLogs() {
     });
     setLogsList(checkedList);
     handleSnackbarClick();
+  };
+
+  const handleCommentChange = (commentId, e) => {
+    if (e.key === "Enter") {
+      const checkedList = logsList.map((itr) => {
+        if (itr.id === commentId) itr.comments = e.target.value;
+        return itr;
+      });
+      setLogsList(checkedList);
+      handleSnackbarClick();
+    }
   };
 
   const handleDelete = (deleteId) => {
@@ -175,7 +187,7 @@ function MyLogs() {
         </div>
         <h2>My Logs</h2>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table sx={{ minWidth: 400 }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>SN</TableCell>
@@ -183,6 +195,7 @@ function MyLogs() {
                 <TableCell>Date</TableCell>
                 <TableCell>ID</TableCell>
                 <TableCell>Done</TableCell>
+                <TableCell>Comments</TableCell>
                 <TableCell>Delete</TableCell>
               </TableRow>
             </TableHead>
@@ -200,7 +213,7 @@ function MyLogs() {
                   <TableCell>
                     <FormControl
                       variant="standard"
-                      sx={{ m: 1, minWidth: 120 }}
+                      sx={{ m: 1, minWidth: 60 }}
                       size="small"
                     >
                       <Select
@@ -221,6 +234,14 @@ function MyLogs() {
                     <Checkbox
                       checked={note.checked}
                       onChange={() => handleCheckBox(note.id)}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      hiddenLabel
+                      defaultValue={note.comments}
+                      onKeyDown={(e) => handleCommentChange(note.id, e)}
+                      size="small"
                     />
                   </TableCell>
                   <TableCell>
