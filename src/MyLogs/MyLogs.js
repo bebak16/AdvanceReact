@@ -45,6 +45,19 @@ const styles = {
 
 const MSG = "Please save changes after updating your log.";
 
+const lightColors = [
+  '#bfefff', // Light blue
+  '#c1ffc1', // Light green
+  '#f5f5f5', // Light grey
+  '#d2b48c', // Tan
+  '#fffacd', // Lemon chiffon
+  '#e0ffff', // Light cyan
+  '#f0fff0', // Honeydew
+  '#fafad2', // Light goldenrod yellow
+  '#f0e68c', // Khaki
+  '#f5deb3', // Wheat
+];
+
 function MyLogs() {
   const [logsList, setLogsList] = useState([]);
   const [textValue, setTextValue] = useState("");
@@ -56,7 +69,7 @@ function MyLogs() {
   const { data, updateList } = useFireBase("logs");
 
   useEffect(() => {
-    if (data) {
+    if (data.length > 0) {
       setLogsList(data);
     }
   }, [data]);
@@ -70,13 +83,25 @@ function MyLogs() {
     setDateValue(date);
   };
 
+  const handleGetColor = () => {
+    const log = logsList.find(itr => itr.date === dateValue);
+  
+    if (log) {
+      return log.color;
+    }
+    const newKey = Math.floor(Math.random() * 10);
+    return lightColors[newKey];
+  };
+
   const addNoteToList = () => {
     const newId = Math.floor(Math.random() * 1000);
+    const getColor = handleGetColor();
     const noteValues = {
       id: newId,
       text: textValue,
       checked: false,
       gmail: 0,
+      color: getColor,
       comments: "",
       date: dateValue,
     };
@@ -204,6 +229,7 @@ function MyLogs() {
                 <TableRow
                   key={note.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  style={{backgroundColor : note.color}}
                 >
                   <TableCell>{index + 1}</TableCell>
                   <TableCell component="th" scope="row" style={styles.noteCell}>
