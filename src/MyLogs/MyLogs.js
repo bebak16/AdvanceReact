@@ -20,13 +20,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import useFireBase from "../utils/useFireBase";
 
 const styles = {
-
   input: {
     width: "50%",
+    height: "4em",
   },
 
   inputDate: {
     width: "8em",
+    height: "4em",
     marginLeft: "20px",
   },
 
@@ -35,10 +36,10 @@ const styles = {
   },
 
   button: {
-    width: "9em",
+    width: "8em",
     height: "4em",
     fontSize: "12px",
-    marginLeft: "2em",
+    marginLeft: "1em",
   },
 };
 
@@ -49,13 +50,15 @@ function MyLogs() {
   const [textValue, setTextValue] = useState("");
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState(MSG);
-  const todayDate = moment(new Date()).format("DD/MM/YYYY");
+  const todayDate = moment(new Date()).format("YYYY/MM/DD");
   const [dateValue, setDateValue] = useState(todayDate);
 
   const { data, updateList } = useFireBase("logs");
 
   useEffect(() => {
-    if (data) setLogsList(data);
+    if (data) {
+      setLogsList(data);
+    }
   }, [data]);
 
   const handleInputChange = (e) => {
