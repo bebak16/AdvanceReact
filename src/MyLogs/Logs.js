@@ -3,14 +3,16 @@ import TextField from "@mui/material/TextField";
 import MyLogs from "./MyLogs";
 
 export default function Logs() {
-  const [isAllowed, setIsAllowed] = React.useState(false);
+  const passkey = process.env.REACT_APP_PASS_KEY;
+
+  const isLogged = localStorage.getItem("isBob");
+  const [isAllowed, setIsAllowed] = React.useState(isLogged === passkey);
 
   const handleInputChange = (e) => {
-    if (e.key === "Enter") {
-      if (e.target.value === process.env.REACT_APP_PASS_KEY) {
+      if (e.target.value === passkey) {
         setIsAllowed(true);
+        localStorage.setItem("isBob", e.target.value);
       }
-    }
   };
 
   return (
@@ -26,7 +28,7 @@ export default function Logs() {
               label="Enter Password"
               variant="outlined"
               type="password"
-              onKeyUp={handleInputChange}
+              onChange={handleInputChange}
               autoFocus
             />
           </p>

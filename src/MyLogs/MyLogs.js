@@ -36,10 +36,10 @@ const styles = {
   },
 
   button: {
-    width: "8em",
+    width: "9em",
     height: "4em",
     fontSize: "12px",
-    marginLeft: "1em",
+    marginLeft: "0.5em",
   },
 };
 
@@ -48,7 +48,7 @@ const MSG = "Please save changes after updating your log.";
 const lightColors = [
   '#bfefff', // Light blue
   '#c1ffc1', // Light green
-  '#f5f5f5', // Light grey
+  '#fafbf5', // Light
   '#d2b48c', // Tan
   '#fffacd', // Lemon chiffon
   '#e0ffff', // Light cyan
@@ -229,7 +229,7 @@ function MyLogs() {
                 <TableRow
                   key={note.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  style={{backgroundColor : note.color}}
+                  style={{backgroundColor : note.checked ? "#f5f5f5" : note.color}}
                 >
                   <TableCell>{index + 1}</TableCell>
                   <TableCell component="th" scope="row" style={styles.noteCell}>

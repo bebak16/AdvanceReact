@@ -30,6 +30,7 @@ const App = () => {
             <Route path="/MocktailApp/:id" element={<SingleCocktail />} />
             <Route path="/Pokemons" element={<Pokemons />} />
             <Route path="/TourApp" element={<TourApp />} />
+            <Route component={<CalculatorAdv />} />
             {/* <Route path="/BasicQuizApp" element={<BasicQuizApp />} /> */}
           </Routes>
         </main>
