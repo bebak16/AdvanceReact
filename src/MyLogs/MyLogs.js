@@ -18,6 +18,7 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useFireBase from "../utils/useFireBase";
+import "./MyLogs.css";
 
 const styles = {
   input: {
@@ -32,7 +33,7 @@ const styles = {
   },
 
   noteCell: {
-    minWidth: "15em",
+    minWidth: "12em",
   },
 
   button: {
@@ -46,16 +47,16 @@ const styles = {
 const MSG = "Please save changes after updating your log.";
 
 const lightColors = [
-  '#bfefff', // Light blue
-  '#c1ffc1', // Light green
-  '#fafbf5', // Light
-  '#d2b48c', // Tan
-  '#fffacd', // Lemon chiffon
-  '#e0ffff', // Light cyan
-  '#f0fff0', // Honeydew
-  '#fafad2', // Light goldenrod yellow
-  '#f0e68c', // Khaki
-  '#f5deb3', // Wheat
+  "#bfefff", // Light blue
+  "#c1ffc1", // Light green
+  "#fafbf5", // Light
+  "#d2b48c", // Tan
+  "#fffacd", // Lemon chiffon
+  "#e0ffff", // Light cyan
+  "#f0fff0", // Honeydew
+  "#fafad2", // Light goldenrod yellow
+  "#f0e68c", // Khaki
+  "#f5deb3", // Wheat
 ];
 
 function MyLogs() {
@@ -84,8 +85,8 @@ function MyLogs() {
   };
 
   const handleGetColor = () => {
-    const log = logsList.find(itr => itr.date === dateValue);
-  
+    const log = logsList.find((itr) => itr.date === dateValue);
+
     if (log) {
       return log.color;
     }
@@ -212,7 +213,11 @@ function MyLogs() {
         </div>
         <h2>My Logs</h2>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 400 }} aria-label="simple table">
+          <Table
+            sx={{ minWidth: 400 }}
+            aria-label="simple table"
+            className="table"
+          >
             <TableHead>
               <TableRow>
                 <TableCell>SN</TableCell>
@@ -229,7 +234,7 @@ function MyLogs() {
                 <TableRow
                   key={note.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  style={{backgroundColor : note.checked ? "#f5f5f5" : note.color}}
+                  style={{ backgroundColor: note.color }}
                 >
                   <TableCell>{index + 1}</TableCell>
                   <TableCell component="th" scope="row" style={styles.noteCell}>

@@ -5,14 +5,16 @@ import MyLogs from "./MyLogs";
 export default function Logs() {
   const passkey = process.env.REACT_APP_PASS_KEY;
 
-  const isLogged = localStorage.getItem("isBob");
+  const isLogged = sessionStorage.getItem("isBob");
   const [isAllowed, setIsAllowed] = React.useState(isLogged === passkey);
 
   const handleInputChange = (e) => {
+    if (e.key === "Enter") {
       if (e.target.value === passkey) {
         setIsAllowed(true);
-        localStorage.setItem("isBob", e.target.value);
+        sessionStorage.setItem("isBob", e.target.value);
       }
+    }
   };
 
   return (
