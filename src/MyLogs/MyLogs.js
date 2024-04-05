@@ -22,18 +22,21 @@ import "./MyLogs.css";
 
 const styles = {
   input: {
-    width: "30em",
+    width: "27em",
     height: "4em",
   },
 
   inputDate: {
-    width: "8em",
+    width: "12em",
     height: "4em",
     marginLeft: "10px",
   },
 
   noteCell: {
     width: "20em",
+  },
+  date: {
+    width: "6em",
   },
 
   button: {
@@ -64,7 +67,7 @@ function MyLogs() {
   const [textValue, setTextValue] = useState("");
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState(MSG);
-  const todayDate = moment(new Date()).format("YYYY/MM/DD");
+  const todayDate = new Date().toISOString().slice(0, 16)
   const [dateValue, setDateValue] = useState(todayDate);
 
   const { data, updateList } = useFireBase("logs");
@@ -85,7 +88,7 @@ function MyLogs() {
   };
 
   const handleGetColor = () => {
-    const log = logsList.find((itr) => itr.date === dateValue);
+    const log = logsList.find((itr) => itr.date.slice(0, 16) === dateValue.slice(0, 16));
 
     if (log) {
       return log.color;
@@ -189,6 +192,7 @@ function MyLogs() {
           <TextField
             id="date-field"
             label="Add a date"
+            type="datetime-local"
             variant="outlined"
             value={dateValue}
             onChange={handleDateChange}
@@ -223,6 +227,7 @@ function MyLogs() {
                 <TableCell>SN</TableCell>
                 <TableCell style={styles.noteCell}>Log</TableCell>
                 <TableCell>Date</TableCell>
+                <TableCell>Time</TableCell>
                 <TableCell>ID</TableCell>
                 <TableCell>Done</TableCell>
                 <TableCell>Comments</TableCell>
@@ -240,7 +245,8 @@ function MyLogs() {
                   <TableCell component="th" scope="row" style={styles.noteCell}>
                     {note.text}
                   </TableCell>
-                  <TableCell>{note.date}</TableCell>
+                  <TableCell style={styles.date}>{note.date.split('T')[0]}</TableCell>
+                  <TableCell>{note.date.split('T')[1]}</TableCell>
                   <TableCell>
                     <FormControl
                       variant="standard"
