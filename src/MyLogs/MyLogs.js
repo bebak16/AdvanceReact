@@ -22,25 +22,25 @@ import "./MyLogs.css";
 
 const styles = {
   input: {
-    width: "50%",
+    width: "30em",
     height: "4em",
   },
 
   inputDate: {
     width: "8em",
     height: "4em",
-    marginLeft: "20px",
+    marginLeft: "10px",
   },
 
   noteCell: {
-    minWidth: "12em",
+    width: "20em",
   },
 
   button: {
     width: "9em",
-    height: "4em",
+    height: "4.5em",
     fontSize: "12px",
-    marginLeft: "0.5em",
+    marginLeft: "10px",
   },
 };
 
