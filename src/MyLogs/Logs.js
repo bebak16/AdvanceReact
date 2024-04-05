@@ -30,7 +30,7 @@ export default function Logs() {
               label="Enter Password"
               variant="outlined"
               type="password"
-              onChange={handleInputChange}
+              onKeyDown={handleInputChange}
               autoFocus
             />
           </p>
