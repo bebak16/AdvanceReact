@@ -19,9 +19,6 @@ export default function Logs() {
 
   const handleInputChange = (e) => {
     setInputVal(e.target.value);
-    if(e.key === "Enter"){
-      validateUser();
-    }
   };
 
   return (
@@ -37,7 +34,7 @@ export default function Logs() {
               label="Enter Password"
               variant="outlined"
               type="password"
-              onKeyDown={handleInputChange}
+              onChange={handleInputChange}
               autoFocus
             />
             <Button

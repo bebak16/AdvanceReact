@@ -45,6 +45,7 @@ const DrawerList = () => {
     if (path === nav) {
       setPath("");
     } else {
+      toggleSidebar();
       setPath(nav);
     }
   };
