@@ -36,7 +36,7 @@ const styles = {
     width: "20em",
   },
   date: {
-    width: "6em",
+    width: "9em",
   },
 
   button: {
@@ -141,14 +141,12 @@ function MyLogs() {
   };
 
   const handleCommentChange = (commentId, e) => {
-    if (e.key === "Enter") {
       const checkedList = logsList.map((itr) => {
         if (itr.id === commentId) itr.comments = e.target.value;
         return itr;
       });
       setLogsList(checkedList);
       handleSnackbarClick();
-    }
   };
 
   const handleDelete = (deleteId) => {
@@ -226,8 +224,7 @@ function MyLogs() {
               <TableRow>
                 <TableCell>SN</TableCell>
                 <TableCell style={styles.noteCell}>Log</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Time</TableCell>
+                <TableCell>Date & Time</TableCell>
                 <TableCell>ID</TableCell>
                 <TableCell>Done</TableCell>
                 <TableCell>Comments</TableCell>
@@ -245,8 +242,9 @@ function MyLogs() {
                   <TableCell component="th" scope="row" style={styles.noteCell}>
                     {note.text}
                   </TableCell>
-                  <TableCell style={styles.date}>{note.date.split('T')[0]}</TableCell>
-                  <TableCell>{note.date.split('T')[1]}</TableCell>
+                  <TableCell style={styles.date}>
+                    {note.date.split('T')[0]}  {note.date.split('T')[1]}
+                  </TableCell>
                   <TableCell>
                     <FormControl
                       variant="standard"
@@ -273,12 +271,13 @@ function MyLogs() {
                       onChange={() => handleCheckBox(note.id)}
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell component="tr" scope="row">
                     <TextField
                       hiddenLabel
                       defaultValue={note.comments}
-                      onKeyDown={(e) => handleCommentChange(note.id, e)}
+                      onBlur={(e) => handleCommentChange(note.id, e)}
                       size="small"
+                      className="comments"
                     />
                   </TableCell>
                   <TableCell>

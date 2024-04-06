@@ -23,11 +23,10 @@ export default function Logs() {
 
   return (
     <div>
-      {isAllowed ? (
-        <MyLogs />
-      ) : (
+      {isAllowed && <MyLogs />}
+      {!isAllowed && (
         <>
-          <h2>Enter Password to continue</h2>
+          <h2>Enter password to access notes or logs</h2>
           <p>
             <TextField
               id="outlined-basic"
@@ -48,7 +47,7 @@ export default function Logs() {
                 marginLeft: "10px",
               }}
             >
-              Add Log
+              Login
             </Button>
           </p>
         </>

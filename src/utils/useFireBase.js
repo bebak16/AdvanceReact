@@ -26,15 +26,14 @@ const useFireBase = (props) => {
       get(child(dbRef, dataTable))
         .then((snapshot) => {
           if (snapshot.exists()) {
-            console.log("data comes", snapshot.val());
             const dbData = snapshot.val()?.dataList;
             setData(dbData);
           } else {
-            console.log("no data error");
+            console.log("error no data in firebase");
           }
         })
         .catch((error) => {
-          console.error(error);
+          console.error("error no data in firebase", error);
         });
     };
     fetchData();

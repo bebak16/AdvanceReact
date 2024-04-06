@@ -1,6 +1,13 @@
-.table{
-    td{
+.table {
+    td {
         padding: 10px 5px;
         text-align: center;
+    }
+}
+
+.comments {
+    input {
+    font-size: smaller;
+    width: 16em;
     }
 }

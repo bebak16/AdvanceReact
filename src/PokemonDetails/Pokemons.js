@@ -22,7 +22,6 @@ const Pokemons = () => {
 
       const abilitiesData = abilitiesResponses.map((res) => {
         const data2 = res.data.abilities.map((i) => i.ability.name);
-        debugger;
         return data2;
       });
 
