@@ -12,12 +12,12 @@ import Alert from "@mui/material/Alert";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import moment from "moment";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useFireBase from "../utils/useFireBase";
+import { lightColors } from "./lightColours";
 import "./MyLogs.css";
 
 const styles = {
@@ -48,19 +48,6 @@ const styles = {
 };
 
 const MSG = "Please save changes after updating your log.";
-
-const lightColors = [
-  "#bfefff", // Light blue
-  "#c1ffc1", // Light green
-  "#fafbf5", // Light
-  "#d2b48c", // Tan
-  "#fffacd", // Lemon chiffon
-  "#e0ffff", // Light cyan
-  "#f0fff0", // Honeydew
-  "#fafad2", // Light goldenrod yellow
-  "#f0e68c", // Khaki
-  "#f5deb3", // Wheat
-];
 
 function MyLogs() {
   const [logsList, setLogsList] = useState([]);
@@ -93,7 +80,7 @@ function MyLogs() {
     if (log) {
       return log.color;
     }
-    const newKey = Math.floor(Math.random() * 10);
+    const newKey = Math.floor(Math.random() * 30);
     return lightColors[newKey];
   };
 
