@@ -6,14 +6,14 @@ import MyLogs from "./MyLogs";
 export default function Logs() {
   const passkey = process.env.REACT_APP_PASS_KEY;
 
-  const isLogged = sessionStorage.getItem("isBob");
+  const isLogged = localStorage.getItem("isBob");
   const [isAllowed, setIsAllowed] = React.useState(isLogged === passkey);
   const [inputVal, setInputVal] = useState("");
 
   const validateUser = () => {
     if (inputVal === passkey) {
       setIsAllowed(true);
-      sessionStorage.setItem("isBob", inputVal);
+      localStorage.setItem("isBob", inputVal);
     }
   }
 

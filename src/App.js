@@ -22,7 +22,7 @@ const App = () => {
         <main style={{ margin: "1em" }}>
           <h2>React Advance Components Home Page</h2>
           <Routes>
-            <Route exact path="/" element={<CalculatorAdv />} />
+            <Route exact path="/" element={<Logs />} />
             <Route exact path="/CalculatorAdv" element={<CalculatorAdv />} />
             <Route path="/Notes" element={<Notes />} />
             <Route path="/Logs" element={<Logs />} />
@@ -30,7 +30,7 @@ const App = () => {
             <Route path="/MocktailApp/:id" element={<SingleCocktail />} />
             <Route path="/Pokemons" element={<Pokemons />} />
             <Route path="/TourApp" element={<TourApp />} />
-            <Route component={<CalculatorAdv />} />
+            <Route component={<Logs />} />
             {/* <Route path="/BasicQuizApp" element={<BasicQuizApp />} /> */}
           </Routes>
         </main>
