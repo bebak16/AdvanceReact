@@ -75,7 +75,7 @@ function MyLogs() {
   };
 
   const handleGetColor = () => {
-    const log = logsList.find((itr) => itr.date.slice(0, 16) === dateValue.slice(0, 16));
+    const log = logsList.find((itr) => itr.date.slice(0, 10) === dateValue.slice(0, 10));
 
     if (log) {
       return log.color;
