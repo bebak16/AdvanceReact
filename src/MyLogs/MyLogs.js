@@ -54,7 +54,7 @@ function MyLogs() {
   const [textValue, setTextValue] = useState("");
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState(MSG);
-  const todayDate = new Date().toISOString().slice(0, 16)
+  const todayDate = new Date().toISOString().slice(0, 16);
   const [dateValue, setDateValue] = useState(todayDate);
 
   const { data, updateList } = useFireBase("logs");
@@ -75,7 +75,9 @@ function MyLogs() {
   };
 
   const handleGetColor = () => {
-    const log = logsList.find((itr) => itr.date.slice(0, 10) === dateValue.slice(0, 10));
+    const log = logsList.find(
+      (itr) => itr.date.slice(0, 10) === dateValue.slice(0, 10)
+    );
 
     if (log) {
       return log.color;
@@ -99,7 +101,7 @@ function MyLogs() {
 
     if (textValue) {
       const newLogsList = [...logsList, noteValues];
-      newLogsList.sort((a, b) => new Date(a.date) - new Date(b.date));
+      newLogsList.sort((a, b) => new Date(b.date) - new Date(a.date));
       setLogsList(newLogsList);
     } else {
       setMessage("Please enter the logs/details.");
@@ -128,12 +130,12 @@ function MyLogs() {
   };
 
   const handleCommentChange = (commentId, e) => {
-      const checkedList = logsList.map((itr) => {
-        if (itr.id === commentId) itr.comments = e.target.value;
-        return itr;
-      });
-      setLogsList(checkedList);
-      handleSnackbarClick();
+    const checkedList = logsList.map((itr) => {
+      if (itr.id === commentId) itr.comments = e.target.value;
+      return itr;
+    });
+    setLogsList(checkedList);
+    handleSnackbarClick();
   };
 
   const handleDelete = (deleteId) => {
@@ -225,12 +227,12 @@ function MyLogs() {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   style={{ backgroundColor: note.color }}
                 >
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{logsList.length - index}</TableCell>
                   <TableCell component="th" scope="row" style={styles.noteCell}>
                     {note.text}
                   </TableCell>
                   <TableCell style={styles.date}>
-                    {note.date.split('T')[0]}  {note.date.split('T')[1]}
+                    {note.date.split("T")[0]} {note.date.split("T")[1]}
                   </TableCell>
                   <TableCell>
                     <FormControl
