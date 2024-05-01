@@ -1,8 +1,6 @@
 export const lightColors = [
-  "#F0F8FF", // Alice Blue
   "#FAEBD7", // Antique White
   "#00FFFF", // Aqua
-  "#7FFFD4", // Aquamarine
   "#F0FFFF", // Azure
   "#F5F5DC", // Beige
   "#FFF5EE", // Sea Shell

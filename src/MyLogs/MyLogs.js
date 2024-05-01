@@ -79,16 +79,24 @@ function MyLogs() {
       (itr) => itr.date.slice(0, 10) === dateValue.slice(0, 10)
     );
 
-    if (log) {
-      return log.color;
-    }
+    if (log) return log.color;
+
     const newKey = Math.floor(Math.random() * 30);
     return lightColors[newKey];
   };
 
   const addNoteToList = () => {
-    const newId = Math.floor(Math.random() * 1000);
-    const getColor = handleGetColor();
+    const newId = Math.floor(Math.random() * 10000);
+
+    let getColor = "#7CFC00";
+    const lowerText = textValue.toLowerCase();
+
+    if (lowerText.includes("offer")) {
+      getColor = "#7FFFD4"
+    } else {
+      getColor = handleGetColor();
+    }
+
     const noteValues = {
       id: newId,
       text: textValue,
