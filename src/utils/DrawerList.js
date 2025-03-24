@@ -25,12 +25,13 @@ const styles = {
 };
 
 const components = {
-  CalculatorAdv: "Advance Calculator",
+  IITJLogs: "IITJ Logs",
+  Logs : "Vivek Logs",
   Notes: "Vivek Notes",
-  Logs: "Vivek Logs",
-  MocktailApp: "Mocktails Info",
-  Pokemons: "Pokemon Abilities",
-  TourApp: "Tour Guide",
+  CalculatorAdv: "Advance Calculator",
+  // MocktailApp: "Mocktails Info",
+  // Pokemons: "Pokemon Abilities",
+  // TourApp: "Tour Guide",
 };
 
 const DrawerList = () => {
@@ -54,7 +55,7 @@ const DrawerList = () => {
     <>
     <aside className={`left-menu ${isSidebarOpen ? 'open' : ''}`}>
       <div>
-        <h2 style={styles.header}>Component Lists</h2>
+        <h2 style={styles.header}>Vivek's Notes</h2>
         <List>
           {Object.keys(components).map((itr, index) => (
             <ListItem key={index}>
@@ -64,8 +65,7 @@ const DrawerList = () => {
               >
                 <ListItemText
                   style={styles.listText}
-                  primary={itr}
-                  secondary={components[itr]}
+                  primary={components[itr]}
                 />
               </ListItemButton>
               <Switch

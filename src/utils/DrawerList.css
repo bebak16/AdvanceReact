@@ -1,6 +1,7 @@
 /* Define styles for desktop */
 .left-menu {
     width: 18em;
+    height: 90vh;
     background-color: #f0f0f0;
     transition: transform 0.3s ease;
   }

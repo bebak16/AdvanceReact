@@ -17,17 +17,18 @@ const app = initializeApp(firebaseConfig);
 
 const useFireBase = (props) => {
   const [data, setData] = useState([]);
-  const dataTable = props === "logs" ? "logs" : "notes";
+ // const [trackData, setTrackData] = useState([]);
+ // const dataTable = props === "logs" ? "logs" : "notes";
 
   useEffect(() => {
     const fetchData = async () => {
       const dbRef = ref(getDatabase(app));
 
-      get(child(dbRef, dataTable))
+      get(child(dbRef, "logs"))
         .then((snapshot) => {
           if (snapshot.exists()) {
-            const dbData = snapshot.val()?.dataList;
-            setData(dbData);
+            const dbData = snapshot.val();
+            setData(dbData?.data);
           } else {
             console.log("error no data in firebase");
           }
@@ -39,10 +40,10 @@ const useFireBase = (props) => {
     fetchData();
   }, []);
 
-  const updateList = async (dataList) => {
+  const updateList = async (data) => {
     const db = getDatabase(app);
     try {
-      await set(ref(db, `${dataTable}/`), { dataList });
+      await set(ref(db, "logs/"), { data });
     } catch (error) {
       console.error("Error writing data:", error);
     }

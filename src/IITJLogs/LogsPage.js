@@ -17,105 +17,108 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useFireBase from "../utils/useFireBase";
-import { lightColors } from "./lightColours";
-import "./MyLogs.css";
-
+import { lightColors } from "../MyLogs/lightColours";
+import "../MyLogs/MyLogs.css"
+import { InputLabel } from "@mui/material";
 const styles = {
   input: {
-    width: "27em",
-    height: "4em",
+    marginRight: "1rem"
   },
 
   inputDate: {
     width: "12em",
     height: "4em",
-    marginLeft: "10px",
+    marginLeft: "1rem",
+    marginRight: "1rem",
+    marginTop: "5px"
   },
-
+  selectWidth: {
+    width: "8rem",
+  },
+  marginTop: {
+    marginTop: "5px"
+  },
   noteCell: {
-    width: "20em",
+    width: "15em",
   },
+  marks: { width: "5rem" },
   date: {
-    width: "9em",
+    width: "7em",
   },
 
   button: {
     width: "9em",
     height: "4.5em",
     fontSize: "12px",
-    marginLeft: "10px",
+    marginLeft: "1rem",
   },
 };
-
 const MSG = "Please save changes after updating your log.";
 
-function MyLogs() {
+function LogsPage() {
   const [logsList, setLogsList] = useState([]);
-  const [textValue, setTextValue] = useState("");
+  const [subject, setSubject] = useState("AI");
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState(MSG);
   const todayDate = new Date().toISOString().slice(0, 16);
   const [dateValue, setDateValue] = useState(todayDate);
+  const [details, setDetails] = useState("");
+  const [type, setType] = useState("Assignment");
 
   const { data, updateList } = useFireBase();
 
   useEffect(() => {
-    if (data?.dataList) {
-      setLogsList(data.dataList);
+    if (data?.trackList) {
+      const savedData = data.trackList;
+      const updatedData = savedData.map(itr => {
+        const dueDate = handleDueDate(itr.date);
+        return {...itr, due: dueDate}
+      })
+      const sortUpdated = updatedData.sort((a, b) => a.due - b.due)
+      setLogsList(sortUpdated);
     }
   }, [data]);
 
-  const handleInputChange = (e) => {
+  const handleDetailsChange = (e) => {
     const value = e.target.value;
-    setTextValue(value);
+    setDetails(value);
   };
   const handleDateChange = (e) => {
     const date = e.target.value;
     setDateValue(date);
   };
 
-  const handleGetColor = () => {
-    const log = logsList.find(
-      (itr) => itr.date.slice(0, 10) === dateValue.slice(0, 10)
-    );
-
-    if (log) return log.color;
-
-    const newKey = Math.floor(Math.random() * 30);
-    return lightColors[newKey];
-  };
-
   const addNoteToList = () => {
     const newId = Math.floor(Math.random() * 10000);
-
-    let getColor = "#7CFC00";
-    const lowerText = textValue.toLowerCase();
-
-    if (lowerText.includes("offer")) {
-      getColor = "#7FFFD4"
-    } else {
-      getColor = handleGetColor();
+    const subjectColors = {
+      AI: "#F0E68C",
+      DSAT: "#FFFACD",
+      ODAS: "#F5F5F5",
+      ML: "#FAEBD7"
     }
+    let getColor = subjectColors?.[subject];
 
     const noteValues = {
       id: newId,
-      text: textValue,
+      subject: subject,
       checked: false,
-      gmail: 0,
+      type: type,
+      marks: "",
+      percent: "",
       color: getColor,
-      comments: "",
+      details: details,
       date: dateValue,
+      due: handleDueDate(dateValue),
     };
 
-    if (textValue) {
+    if (subject) {
       const newLogsList = [...logsList, noteValues];
-      newLogsList.sort((a, b) => new Date(b.date) - new Date(a.date));
+      newLogsList.sort((a, b) => a.due - b.due);
       setLogsList(newLogsList);
     } else {
       setMessage("Please enter the logs/details.");
       setOpen(true);
     }
-    setTextValue("");
     handleSnackbarClick();
   };
 
@@ -127,10 +130,16 @@ function MyLogs() {
     setLogsList(checkedList);
     handleSnackbarClick();
   };
+  const handleMarks = (id, e) => {
+    const val = e.target.value;
+    if (!val) return;
 
-  const handleIDChange = (gmailId, value) => {
     const checkedList = logsList.map((itr) => {
-      if (itr.id === gmailId) itr.gmail = value;
+      if (itr.id === id) {
+        itr.marks = val
+        const [numerator, denominator] = val.split("/").map(Number);
+        itr.percent = `${Math.round((numerator / denominator) * 100)}%`
+      }
       return itr;
     });
     setLogsList(checkedList);
@@ -139,7 +148,7 @@ function MyLogs() {
 
   const handleCommentChange = (commentId, e) => {
     const checkedList = logsList.map((itr) => {
-      if (itr.id === commentId) itr.comments = e.target.value;
+      if (itr.id === commentId) itr.details = e.target.value;
       return itr;
     });
     setLogsList(checkedList);
@@ -152,8 +161,19 @@ function MyLogs() {
     handleSnackbarClick();
   };
 
+  const handleDueDate = (ndate) => {
+    const enteredDate = new Date(ndate);
+    if (isNaN(enteredDate.getTime())) {
+      return 0;
+    }
+    const today = new Date();
+    const timeDiff = enteredDate - today;
+    const daysDiff = Math.max(Math.ceil(timeDiff / (1000 * 60 * 60 * 24)), 0);
+    return daysDiff;
+  };
+
   const saveNotes = () => {
-    updateList({...data, dataList : logsList});
+    updateList({ ...data, trackList: logsList });
     setMessage("Logs Saved Successfully!");
     handleSnackbarClick();
   };
@@ -174,21 +194,59 @@ function MyLogs() {
     <div>
       <section>
         <div>
+          <FormControl
+            variant="standard"
+            sx={{ m: 1, minWidth: 60 }}
+            size="small"
+            style={styles.selectWidth}
+          >
+            <InputLabel>Subject</InputLabel>
+            <Select
+              labelId="select-small-label"
+              id="select-small"
+              value={subject}
+              label="Subject"
+              onChange={(e) => setSubject(e.target.value)}
+              autoFocus
+            >
+              <MenuItem value="AI">AI</MenuItem>
+              <MenuItem value="DSAT">DSAT</MenuItem>
+              <MenuItem value="ODAS">ODAS</MenuItem>
+              <MenuItem value="ML">ML</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl
+            variant="standard"
+            sx={{ m: 1, minWidth: 60 }}
+            size="small"
+            style={styles.selectWidth}
+          >
+            <InputLabel>Type</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              value={type}
+              label="typeId"
+              onChange={(e) => setType(e.target.value)}
+            >
+              <MenuItem value="Quiz">Quiz</MenuItem>
+              <MenuItem value="Assignment">Assignment</MenuItem>
+              <MenuItem value="Exams">Exams</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
-            id="outlined-basic"
-            label="Add a new log to list"
-            variant="outlined"
-            multiline
-            value={textValue}
-            onChange={handleInputChange}
-            style={styles.input}
-            autoFocus
+            id="subject-details"
+            label="Details"
+            variant="standard"
+            onBlur={handleDetailsChange}
+            style={styles.marginTop}
+            placeholder="Enter description"
           />
           <TextField
             id="date-field"
             label="Add a date"
-            type="datetime-local"
-            variant="outlined"
+            type="date"
+            variant="standard"
             value={dateValue}
             onChange={handleDateChange}
             style={styles.inputDate}
@@ -210,7 +268,7 @@ function MyLogs() {
             Save Logs
           </Button>
         </div>
-        <h2>My Logs</h2>
+        <h2>IITJ Assignment & Quiz Tracker</h2>
         <TableContainer component={Paper}>
           <Table
             sx={{ minWidth: 400 }}
@@ -220,11 +278,14 @@ function MyLogs() {
             <TableHead>
               <TableRow>
                 <TableCell>SN</TableCell>
-                <TableCell style={styles.noteCell}>Log</TableCell>
-                <TableCell>Date & Time</TableCell>
-                <TableCell>ID</TableCell>
-                <TableCell>Done</TableCell>
-                <TableCell>Comments</TableCell>
+                <TableCell>Subject</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell style={styles.noteCell}>Details</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Marks</TableCell>
+                <TableCell>Percent</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Due Days</TableCell>
                 <TableCell>Delete</TableCell>
               </TableRow>
             </TableHead>
@@ -236,31 +297,21 @@ function MyLogs() {
                   style={{ backgroundColor: note.color }}
                 >
                   <TableCell>{logsList.length - index}</TableCell>
-                  <TableCell component="th" scope="row" style={styles.noteCell}>
-                    {note.text}
-                  </TableCell>
-                  <TableCell style={styles.date}>
-                    {note.date.split("T")[0]} {note.date.split("T")[1]}
+                  <TableCell component="th" scope="row">
+                    {note.subject}
                   </TableCell>
                   <TableCell>
-                    <FormControl
-                      variant="standard"
-                      sx={{ m: 1, minWidth: 60 }}
+                    {note.type}
+                  </TableCell>
+                  <TableCell component="tr" scope="row" style={styles.noteCell}>
+                    <TextField
+                      hiddenLabel
+                      defaultValue={note.details}
+                      onBlur={(e) => handleCommentChange(note.id, e)}
                       size="small"
-                    >
-                      <Select
-                        labelId="demo-select-small-label"
-                        id="demo-select-small"
-                        value={note.gmail}
-                        label="Gmail id"
-                        onChange={(e) =>
-                          handleIDChange(note.id, e.target.value)
-                        }
-                      >
-                        <MenuItem value={0}>vats</MenuItem>
-                        <MenuItem value={1}>rai</MenuItem>
-                      </Select>
-                    </FormControl>
+                      variant="standard"
+                      className="details"
+                    />
                   </TableCell>
                   <TableCell>
                     <Checkbox
@@ -271,11 +322,20 @@ function MyLogs() {
                   <TableCell component="tr" scope="row">
                     <TextField
                       hiddenLabel
-                      defaultValue={note.comments}
-                      onBlur={(e) => handleCommentChange(note.id, e)}
+                      defaultValue={note.marks}
+                      style={styles.marks}
+                      onBlur={(e) => handleMarks(note.id, e)}
                       size="small"
-                      className="comments"
+                      variant="standard"
+                      className="details"
                     />
+                  </TableCell>
+                  <TableCell>{note.percent}</TableCell>
+                  <TableCell style={styles.date}>
+                    {note.date.split("T")[0]} {note.date.split("T")[1]}
+                  </TableCell>
+                  <TableCell>
+                    {note.due}
                   </TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleDelete(note.id)}>
@@ -307,4 +367,4 @@ function MyLogs() {
   );
 }
 
-export default MyLogs;
+export default LogsPage;
