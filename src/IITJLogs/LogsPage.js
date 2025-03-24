@@ -52,6 +52,12 @@ const styles = {
     fontSize: "12px",
     marginLeft: "1rem",
   },
+  button2: {
+    width: "6em",
+    height: "2.5em",
+    fontSize: "12px",
+    marginLeft: "1rem",
+  },
 };
 const MSG = "Please save changes after updating your log.";
 
@@ -67,15 +73,43 @@ function LogsPage() {
 
   const { data, updateList } = useFireBase();
 
+  const sortByDueDate = (arr) => {
+    const data = Array.isArray(arr) ? arr : logsList;
+    const sortedVal = [...data].sort((a, b) => {
+      if (a.due === 0) return 1;  // Push 0 to the end
+      if (b.due === 0) return -1; // Push 0 to the end
+      return a.due - b.due;
+    });
+    setLogsList(sortedVal);
+  }
+
+  const sortBySubject = () => {
+    const sortedSubjects = [...logsList].sort((a, b) => a.subject.localeCompare(b.subject));
+    setLogsList(sortedSubjects);
+  };
+
+  const sortByType = () => {
+    const sortedTypes = [...logsList].sort((a, b) => a.type.localeCompare(b.type));
+    setLogsList(sortedTypes);
+  };
+
+  const sortByPercent = () => {
+    const sortedPercent = [...logsList].sort((a, b) => {
+      const percentA = a.percent ? parseInt(a.percent) : 0;  // Treat missing values as 0
+      const percentB = b.percent ? parseInt(b.percent) : 0;
+      return percentA - percentB;
+    });
+    setLogsList(sortedPercent);
+  };
+
   useEffect(() => {
     if (data?.trackList) {
       const savedData = data.trackList;
       const updatedData = savedData.map(itr => {
         const dueDate = handleDueDate(itr.date);
-        return {...itr, due: dueDate}
+        return { ...itr, due: dueDate }
       })
-      const sortUpdated = updatedData.sort((a, b) => a.due - b.due)
-      setLogsList(sortUpdated);
+      sortByDueDate(updatedData);
     }
   }, [data]);
 
@@ -91,11 +125,11 @@ function LogsPage() {
   const addNoteToList = () => {
     const newId = Math.floor(Math.random() * 10000);
     const subjectColors = {
-      AI: "#F0E68C",
-      DSAT: "#FFFACD",
-      ODAS: "#F5F5F5",
-      ML: "#FAEBD7"
-    }
+      AI: "#E6F7FF",   // Soft Baby Blue
+      DSAT: "#FFEFD5", // Light Peach
+      ODAS: "#F0FFF0", // Honeydew Green
+      ML: "#FFD1DC"    // Blush Pink
+    };
     let getColor = subjectColors?.[subject];
 
     const noteValues = {
@@ -113,8 +147,7 @@ function LogsPage() {
 
     if (subject) {
       const newLogsList = [...logsList, noteValues];
-      newLogsList.sort((a, b) => a.due - b.due);
-      setLogsList(newLogsList);
+      sortByDueDate(newLogsList);
     } else {
       setMessage("Please enter the logs/details.");
       setOpen(true);
@@ -269,6 +302,42 @@ function LogsPage() {
           </Button>
         </div>
         <h2>IITJ Assignment & Quiz Tracker</h2>
+        <div>
+          <strong>SORT BY :</strong>
+          <Button
+            variant="contained"
+            onClick={sortBySubject}
+            color="success"
+            style={styles.button2}
+          >
+            Subject
+          </Button>
+          <Button
+            variant="contained"
+            onClick={sortByType}
+            color="success"
+            style={styles.button2}
+          >
+            Type
+          </Button>
+          <Button
+            variant="contained"
+            onClick={sortByPercent}
+            color="success"
+            style={styles.button2}
+          >
+            Percent
+          </Button>
+          <Button
+            variant="contained"
+            onClick={sortByDueDate}
+            color="success"
+            style={styles.button2}
+          >
+            Reset
+          </Button>
+          <p />
+        </div>
         <TableContainer component={Paper}>
           <Table
             sx={{ minWidth: 400 }}
@@ -338,8 +407,14 @@ function LogsPage() {
                     {note.due}
                   </TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleDelete(note.id)}>
-                      <DeleteIcon sx={{ color: "black" }} />
+                    <IconButton onClick={() => handleDelete(note.id)}
+                      sx={{
+                        color: "black",
+                        width: "40px",
+                        height: "40px"
+                      }}
+                    >
+                      <DeleteIcon />
                     </IconButton>
                   </TableCell>
                 </TableRow>

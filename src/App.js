@@ -18,7 +18,7 @@ const App = () => {
         <DrawerList />
         <main style={{ margin: "1em" }}>
           <Routes>
-            <Route exact path="/" element={<Logs />} />
+            <Route exact path="/" element={<IITJLogs />} />
             <Route exact path="/IITJLogs" element={<IITJLogs />} />
             <Route path="/Logs" element={<Logs />} />
             <Route path="/Notes" element={<Notes />} />

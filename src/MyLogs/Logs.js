@@ -34,6 +34,7 @@ export default function Logs() {
               variant="outlined"
               type="password"
               onChange={handleInputChange}
+              onKeyDown={(e) => e.key === "Enter" && validateUser()}
               autoFocus
             />
             <Button
