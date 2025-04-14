@@ -16,7 +16,7 @@ const App = () => {
       </nav>
       <div style={{ display: "flex" }}>
         <DrawerList />
-        <main style={{ margin: "1em" }}>
+        <main style={{ marginTop: "6rem", margin: "1rem" }}>
           <Routes>
             <Route exact path="/" element={<IITJLogs />} />
             <Route exact path="/IITJLogs" element={<IITJLogs />} />

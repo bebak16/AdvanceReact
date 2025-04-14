@@ -76,8 +76,8 @@ function LogsPage() {
   const sortByDueDate = (arr) => {
     const data = Array.isArray(arr) ? arr : logsList;
     const sortedVal = [...data].sort((a, b) => {
-      if (a.due === 0) return 1;  // Push 0 to the end
-      if (b.due === 0) return -1; // Push 0 to the end
+      if (a.due != 0) return 1;  // Push 0 to the end
+      if (b.due != 0) return -1; // Push 0 to the end
       return a.due - b.due;
     });
     setLogsList(sortedVal);
@@ -201,8 +201,9 @@ function LogsPage() {
     }
     const today = new Date();
     const timeDiff = enteredDate - today;
-    const daysDiff = Math.max(Math.ceil(timeDiff / (1000 * 60 * 60 * 24)), 0);
-    return daysDiff;
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    if(daysDiff >= 0 ) return daysDiff;
+    else null;
   };
 
   const saveNotes = () => {
@@ -404,7 +405,7 @@ function LogsPage() {
                     {note.date.split("T")[0]} {note.date.split("T")[1]}
                   </TableCell>
                   <TableCell>
-                    {note.due}
+                    {note?.due == 0 ? "Today" : note.due}
                   </TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleDelete(note.id)}
