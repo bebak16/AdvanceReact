@@ -18,11 +18,11 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useFireBase from "../utils/useFireBase";
 import { lightColors } from "../MyLogs/lightColours";
-import "../MyLogs/MyLogs.css"
+import "../MyLogs/MyLogs.css";
 import { InputLabel } from "@mui/material";
 const styles = {
   input: {
-    marginRight: "1rem"
+    marginRight: "1rem",
   },
 
   inputDate: {
@@ -30,13 +30,13 @@ const styles = {
     height: "4em",
     marginLeft: "1rem",
     marginRight: "1rem",
-    marginTop: "5px"
+    marginTop: "5px",
   },
   selectWidth: {
     width: "8rem",
   },
   marginTop: {
-    marginTop: "5px"
+    marginTop: "5px",
   },
   noteCell: {
     width: "15em",
@@ -61,9 +61,31 @@ const styles = {
 };
 const MSG = "Please save changes after updating your log.";
 
+// Add new subject here in intial
+const subjectList = [
+  "Deep Learning",
+  "DIPA",
+  "Technical Comm",
+  "DLOps",
+  "AI",
+  "DSAT",
+  "ODAS",
+  "ML",
+];
+const subjectColors = {
+  "Deep Learning": "#E6F7FF",
+  DIPA: "#FFEFD5",
+  "Technical Comm": "#F0FFF0",
+  DLOps: "#FFD1DC",
+  AI: "#E6F7FF", // Soft Baby Blue
+  DSAT: "#FFEFD5", // Light Peach
+  ODAS: "#F0FFF0", // Honeydew Green
+  ML: "#FFD1DC", // Blush Pink
+};
+
 function LogsPage() {
   const [logsList, setLogsList] = useState([]);
-  const [subject, setSubject] = useState("AI");
+  const [subject, setSubject] = useState("Deep Learning");
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState(MSG);
   const todayDate = new Date().toISOString().slice(0, 16);
@@ -76,26 +98,30 @@ function LogsPage() {
   const sortByDueDate = (arr) => {
     const data = Array.isArray(arr) ? arr : logsList;
     const sortedVal = [...data].sort((a, b) => {
-      if (a.due == -1) return 1;  // Push 0 to the end
+      if (a.due == -1) return 1; // Push 0 to the end
       if (b.due == -1) return -1; // Push 0 to the end
       return a.due - b.due;
     });
     setLogsList(sortedVal);
-  }
+  };
 
   const sortBySubject = () => {
-    const sortedSubjects = [...logsList].sort((a, b) => a.subject.localeCompare(b.subject));
+    const sortedSubjects = [...logsList].sort((a, b) =>
+      a.subject.localeCompare(b.subject)
+    );
     setLogsList(sortedSubjects);
   };
 
   const sortByType = () => {
-    const sortedTypes = [...logsList].sort((a, b) => a.type.localeCompare(b.type));
+    const sortedTypes = [...logsList].sort((a, b) =>
+      a.type.localeCompare(b.type)
+    );
     setLogsList(sortedTypes);
   };
 
   const sortByPercent = () => {
     const sortedPercent = [...logsList].sort((a, b) => {
-      const percentA = a.percent ? parseInt(a.percent) : 0;  // Treat missing values as 0
+      const percentA = a.percent ? parseInt(a.percent) : 0; // Treat missing values as 0
       const percentB = b.percent ? parseInt(b.percent) : 0;
       return percentA - percentB;
     });
@@ -105,10 +131,10 @@ function LogsPage() {
   useEffect(() => {
     if (data?.trackList) {
       const savedData = data.trackList;
-      const updatedData = savedData.map(itr => {
+      const updatedData = savedData.map((itr) => {
         const dueDate = handleDueDate(itr.date);
-        return { ...itr, due: dueDate }
-      })
+        return { ...itr, due: dueDate };
+      });
       sortByDueDate(updatedData);
     }
   }, [data]);
@@ -124,12 +150,6 @@ function LogsPage() {
 
   const addNoteToList = () => {
     const newId = Math.floor(Math.random() * 10000);
-    const subjectColors = {
-      AI: "#E6F7FF",   // Soft Baby Blue
-      DSAT: "#FFEFD5", // Light Peach
-      ODAS: "#F0FFF0", // Honeydew Green
-      ML: "#FFD1DC"    // Blush Pink
-    };
     let getColor = subjectColors?.[subject];
 
     const noteValues = {
@@ -169,9 +189,9 @@ function LogsPage() {
 
     const checkedList = logsList.map((itr) => {
       if (itr.id === id) {
-        itr.marks = val
+        itr.marks = val;
         const [numerator, denominator] = val.split("/").map(Number);
-        itr.percent = `${Math.round((numerator / denominator) * 100)}%`
+        itr.percent = `${Math.round((numerator / denominator) * 100)}%`;
       }
       return itr;
     });
@@ -202,7 +222,7 @@ function LogsPage() {
     const today = new Date();
     const timeDiff = enteredDate - today;
     const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-    if(daysDiff >= 0 ) return daysDiff;
+    if (daysDiff >= 0) return daysDiff;
     else return -1;
   };
 
@@ -243,10 +263,9 @@ function LogsPage() {
               onChange={(e) => setSubject(e.target.value)}
               autoFocus
             >
-              <MenuItem value="AI">AI</MenuItem>
-              <MenuItem value="DSAT">DSAT</MenuItem>
-              <MenuItem value="ODAS">ODAS</MenuItem>
-              <MenuItem value="ML">ML</MenuItem>
+              {subjectList.map((itr) => (
+                <MenuItem value={itr}>{itr}</MenuItem>
+              ))}
             </Select>
           </FormControl>
           <FormControl
@@ -370,9 +389,7 @@ function LogsPage() {
                   <TableCell component="th" scope="row">
                     {note.subject}
                   </TableCell>
-                  <TableCell>
-                    {note.type}
-                  </TableCell>
+                  <TableCell>{note.type}</TableCell>
                   <TableCell component="tr" scope="row" style={styles.noteCell}>
                     <TextField
                       hiddenLabel
@@ -408,11 +425,12 @@ function LogsPage() {
                     {note.due == -1 ? "" : note.due == 0 ? "Today" : note.due}
                   </TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleDelete(note.id)}
+                    <IconButton
+                      onClick={() => handleDelete(note.id)}
                       sx={{
                         color: "black",
                         width: "40px",
-                        height: "40px"
+                        height: "40px",
                       }}
                     >
                       <DeleteIcon />
