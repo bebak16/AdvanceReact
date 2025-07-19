@@ -17,9 +17,10 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useFireBase from "../utils/useFireBase";
-import { lightColors } from "../MyLogs/lightColours";
 import "../MyLogs/MyLogs.css";
 import { InputLabel } from "@mui/material";
+import AddSubjectPopup from "./AddSubjectPopup";
+
 const styles = {
   input: {
     marginRight: "1rem",
@@ -37,9 +38,13 @@ const styles = {
   },
   marginTop: {
     marginTop: "5px",
+    width: "15rem",
   },
   noteCell: {
     width: "15em",
+    whiteSpace: "normal",
+    wordWrap: "break-word",
+    wordBreak: "break-word",
   },
   marks: { width: "5rem" },
   date: {
@@ -58,35 +63,22 @@ const styles = {
     fontSize: "12px",
     marginLeft: "1rem",
   },
+  button3: {
+    width: "10em",
+    height: "2.5em",
+    fontSize: "12px",
+    marginLeft: "1rem",
+    float: "right",
+  },
 };
 const MSG = "Please save changes after updating your log.";
 
-// Add new subject here in intial
-const subjectList = [
-  "Deep Learning",
-  "DIPA",
-  "Technical Comm",
-  "DLOps",
-  "AI",
-  "DSAT",
-  "ODAS",
-  "ML",
-];
-const subjectColors = {
-  "Deep Learning": "#E6F7FF",
-  DIPA: "#FFEFD5",
-  "Technical Comm": "#F0FFF0",
-  DLOps: "#FFD1DC",
-  AI: "#E6F7FF", // Soft Baby Blue
-  DSAT: "#FFEFD5", // Light Peach
-  ODAS: "#F0FFF0", // Honeydew Green
-  ML: "#FFD1DC", // Blush Pink
-};
-
 function LogsPage() {
   const [logsList, setLogsList] = useState([]);
-  const [subject, setSubject] = useState("Deep Learning");
+  const [subject, setSubject] = useState("2-DIPA");
+  const [subjectList, setSubjectList] = useState([]);
   const [open, setOpen] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
   const [message, setMessage] = useState(MSG);
   const todayDate = new Date().toISOString().slice(0, 16);
   const [dateValue, setDateValue] = useState(todayDate);
@@ -95,12 +87,24 @@ function LogsPage() {
 
   const { data, updateList } = useFireBase();
 
+  useEffect(() => {
+    if (data?.trackList) {
+      const savedData = data.trackList;
+      const updatedData = savedData.map((itr) => {
+        const dueDate = handleDueDate(itr.date);
+        return { ...itr, due: dueDate };
+      });
+      sortByDueDate(updatedData);
+      setSubjectList(data.staticData?.subjectList || []);
+    }
+  }, [data]);
+
   const sortByDueDate = (arr) => {
-    const data = Array.isArray(arr) ? arr : logsList;
-    const sortedVal = [...data].sort((a, b) => {
+    const newdata = Array.isArray(arr) ? arr : logsList;
+    const sortedVal = [...newdata].sort((a, b) => {
       if (a.due == -1) return 1; // Push 0 to the end
       if (b.due == -1) return -1; // Push 0 to the end
-      return a.due - b.due;
+      return b.due - a.due;
     });
     setLogsList(sortedVal);
   };
@@ -128,16 +132,24 @@ function LogsPage() {
     setLogsList(sortedPercent);
   };
 
-  useEffect(() => {
-    if (data?.trackList) {
-      const savedData = data.trackList;
-      const updatedData = savedData.map((itr) => {
-        const dueDate = handleDueDate(itr.date);
-        return { ...itr, due: dueDate };
-      });
-      sortByDueDate(updatedData);
-    }
-  }, [data]);
+  const addNewSubject = (sub, col) => {
+    const stData = data?.staticData;
+    const newSubject = [...subjectList, sub];
+
+    const newSubjectColor = { ...stData?.subjectColors, [sub]: col };
+    const newStaticData = {
+      ...stData,
+      subjectList: newSubject,
+      subjectColors: newSubjectColor,
+    };
+
+    updateList({ ...data, staticData: newStaticData });
+    setOpenPopup(false);
+    setSubjectList(newSubject);
+  };
+
+  const handleOpenPopup = () => setOpenPopup(true);
+  const handleClosePopup = () => setOpenPopup(false);
 
   const handleDetailsChange = (e) => {
     const value = e.target.value;
@@ -150,7 +162,7 @@ function LogsPage() {
 
   const addNoteToList = () => {
     const newId = Math.floor(Math.random() * 10000);
-    let getColor = subjectColors?.[subject];
+    let getColor = data?.staticData?.subjectColors?.[subject];
 
     const noteValues = {
       id: newId,
@@ -159,7 +171,7 @@ function LogsPage() {
       type: type,
       marks: "",
       percent: "",
-      color: getColor,
+      color: getColor || "#E6E6FA",
       details: details,
       date: dateValue,
       due: handleDueDate(dateValue),
@@ -222,8 +234,9 @@ function LogsPage() {
     const today = new Date();
     const timeDiff = enteredDate - today;
     const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-    if (daysDiff >= 0) return daysDiff;
-    else return -1;
+    return daysDiff;
+    // if (daysDiff >= 0) return daysDiff;
+    // else return -1;
   };
 
   const saveNotes = () => {
@@ -260,6 +273,7 @@ function LogsPage() {
               id="select-small"
               value={subject}
               label="Subject"
+              placeholder="Select Subject"
               onChange={(e) => setSubject(e.target.value)}
               autoFocus
             >
@@ -356,8 +370,21 @@ function LogsPage() {
           >
             Reset
           </Button>
+          <Button
+            variant="contained"
+            onClick={handleOpenPopup}
+            color="success"
+            style={styles.button3}
+          >
+            Add Subject
+          </Button>
           <p />
         </div>
+        <AddSubjectPopup
+          open={openPopup}
+          onClose={handleClosePopup}
+          addNewSubject={addNewSubject}
+        />
         <TableContainer component={Paper}>
           <Table
             sx={{ minWidth: 400 }}

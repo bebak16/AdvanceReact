@@ -17,8 +17,6 @@ const app = initializeApp(firebaseConfig);
 
 const useFireBase = (props) => {
   const [data, setData] = useState([]);
- // const [trackData, setTrackData] = useState([]);
- // const dataTable = props === "logs" ? "logs" : "notes";
 
   useEffect(() => {
     const fetchData = async () => {

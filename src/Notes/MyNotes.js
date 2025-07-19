@@ -32,7 +32,10 @@ const styles = {
   },
 
   noteCell: {
-    width: "20em",
+    width: "15em",
+    whiteSpace: 'normal',
+    wordWrap: 'break-word',
+    wordBreak: 'break-word',
   },
   date: {
     width: "9em",
