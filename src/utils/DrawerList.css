@@ -2,7 +2,7 @@
 .left-menu {
     width: 18em;
     height: 90vh;
-    background-color: #f0f0f0;
+    background-color: #f5fbf7;
     transition: transform 0.3s ease;
   }
   
@@ -14,7 +14,7 @@
       left: -250px;
       width: 250px;
       height: 100%;
-      background-color: #f0f0f0;
+      background-color: #f5fbf7;
       transition: left 0.3s ease;
     }
   

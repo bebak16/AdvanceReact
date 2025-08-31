@@ -136,17 +136,14 @@ function LogsPage() {
   const addNewSubject = (subjectsArray) => {
     const stData = data?.staticData;
     const newSubjectList = [...subjectList];
-    const newSubjectColor = { ...stData?.subjectColors };
 
-    subjectsArray.forEach(({ name, color }) => {
+    subjectsArray.forEach(({ name }) => {
       newSubjectList.push(name);
-      newSubjectColor[name] = color;
     });
 
     const newStaticData = {
       ...stData,
       subjectList: newSubjectList,
-      subjectColors: newSubjectColor,
     };
     updateList({ ...data, staticData: newStaticData });
     setOpenPopup(false);
@@ -167,7 +164,6 @@ function LogsPage() {
 
   const addNoteToList = () => {
     const newId = Math.floor(Math.random() * 10000);
-    let getColor = data?.staticData?.subjectColors?.[subject];
 
     const noteValues = {
       id: newId,
@@ -176,7 +172,6 @@ function LogsPage() {
       type: type,
       marks: "",
       percent: "",
-      color: getColor || "#E6E6FA",
       details: details,
       date: dateValue,
       due: handleDueDate(dateValue),
@@ -415,7 +410,9 @@ function LogsPage() {
                 <TableRow
                   key={note.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  style={{ backgroundColor: note.color }}
+                  style={{
+                    backgroundColor: index % 2 === 0 ? "#ffffff" : "#f5fbf7",
+                  }}
                 >
                   <TableCell>{logsList.length - index}</TableCell>
                   <TableCell component="th" scope="row">
