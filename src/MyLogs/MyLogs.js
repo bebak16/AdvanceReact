@@ -34,6 +34,9 @@ const styles = {
 
   noteCell: {
     width: "20em",
+    whiteSpace: "normal",
+    wordWrap: "break-word",
+    wordBreak: "break-word",
   },
   date: {
     width: "9em",
@@ -92,7 +95,7 @@ function MyLogs() {
     const lowerText = textValue.toLowerCase();
 
     if (lowerText.includes("offer")) {
-      getColor = "#7FFFD4"
+      getColor = "#7FFFD4";
     } else {
       getColor = handleGetColor();
     }
@@ -153,7 +156,7 @@ function MyLogs() {
   };
 
   const saveNotes = () => {
-    updateList({...data, dataList : logsList});
+    updateList({ ...data, dataList: logsList });
     setMessage("Logs Saved Successfully!");
     handleSnackbarClick();
   };

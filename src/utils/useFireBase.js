@@ -17,8 +17,7 @@ const app = initializeApp(firebaseConfig);
 
 const useFireBase = (props) => {
   const [data, setData] = useState([]);
- // const [trackData, setTrackData] = useState([]);
- // const dataTable = props === "logs" ? "logs" : "notes";
+  const [refreshFlag, setRefreshFlag] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,12 +37,13 @@ const useFireBase = (props) => {
         });
     };
     fetchData();
-  }, []);
+  }, [refreshFlag]);
 
   const updateList = async (data) => {
     const db = getDatabase(app);
     try {
       await set(ref(db, "logs/"), { data });
+      setRefreshFlag((f) => !f)
     } catch (error) {
       console.error("Error writing data:", error);
     }
