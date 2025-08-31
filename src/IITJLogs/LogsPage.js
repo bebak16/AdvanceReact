@@ -27,7 +27,7 @@ const styles = {
   },
 
   inputDate: {
-    width: "12em",
+    width: "8em",
     height: "4em",
     marginLeft: "1rem",
     marginRight: "1rem",
@@ -38,10 +38,11 @@ const styles = {
   },
   marginTop: {
     marginTop: "5px",
-    width: "15rem",
+    width: "10rem",
   },
   noteCell: {
     width: "15em",
+    minWidth: "10em",
     whiteSpace: "normal",
     wordWrap: "break-word",
     wordBreak: "break-word",
@@ -132,20 +133,24 @@ function LogsPage() {
     setLogsList(sortedPercent);
   };
 
-  const addNewSubject = (sub, col) => {
+  const addNewSubject = (subjectsArray) => {
     const stData = data?.staticData;
-    const newSubject = [...subjectList, sub];
+    const newSubjectList = [...subjectList];
+    const newSubjectColor = { ...stData?.subjectColors };
 
-    const newSubjectColor = { ...stData?.subjectColors, [sub]: col };
+    subjectsArray.forEach(({ name, color }) => {
+      newSubjectList.push(name);
+      newSubjectColor[name] = color;
+    });
+
     const newStaticData = {
       ...stData,
-      subjectList: newSubject,
+      subjectList: newSubjectList,
       subjectColors: newSubjectColor,
     };
-
     updateList({ ...data, staticData: newStaticData });
     setOpenPopup(false);
-    setSubjectList(newSubject);
+    setSubjectList(newSubjectList);
   };
 
   const handleOpenPopup = () => setOpenPopup(true);

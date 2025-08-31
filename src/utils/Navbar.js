@@ -2,18 +2,17 @@ import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { useGlobalContext } from "../context";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const { path, setPath } = useGlobalContext();
-
+  const navigate = useNavigate();
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar style={{ marginLeft: "4em"}}>
-          <Button color="inherit" onClick={() => setPath("")}>
+          <Button color="inherit" onClick={() => navigate("/")}>
+            <span role="img" aria-label="home">🏠</span>
             Home
           </Button>
           <Button color="inherit">About</Button>

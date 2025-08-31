@@ -14,9 +14,27 @@ import {
   Button,
 } from "@mui/material";
 
+
 const AddSubjectPopup = ({ open, onClose, addNewSubject }) => {
   const [subjectName, setSubjectName] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+  const [subjects, setSubjects] = useState([]);
+
+  const handleAddToList = () => {
+    if (subjectName && selectedColor) {
+      setSubjects([...subjects, { name: subjectName, color: selectedColor }]);
+      setSubjectName("");
+      setSelectedColor("");
+    }
+  };
+
+  const handleSubmitAll = () => {
+    if (subjects.length > 0) {
+      addNewSubject(subjects);
+      setSubjects([]);
+      onClose();
+    }
+  };
 
   return (
     <Dialog
@@ -25,11 +43,11 @@ const AddSubjectPopup = ({ open, onClose, addNewSubject }) => {
       PaperProps={{
         sx: {
           width: "500px",
-          height: "400px",
+          height: "500px",
         },
       }}
     >
-      <DialogTitle>Add New Subject</DialogTitle>
+      <DialogTitle>Add Multiple Subjects</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
@@ -66,31 +84,66 @@ const AddSubjectPopup = ({ open, onClose, addNewSubject }) => {
             ))}
           </Select>
         </FormControl>
+        <Button
+          onClick={handleAddToList}
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2, mb: 2 , minWidth: 150 }}
+          disabled={!subjectName || !selectedColor}
+        >
+          Add to List
+        </Button>
 
-        {selectedColor && (
-          <Box
-            sx={{
-              mt: 2,
-              p: 1,
-              borderRadius: 1,
-              backgroundColor: selectedColor,
-              border: "1px solid #ccc",
-              textAlign: "center",
-            }}
-          >
-            Color Preview: {selectedColor}
+        {subjects.length > 0 && (
+          <Box sx={{ mt: 2 }}>
+            <strong style={{ marginBottom: "10px"}}>Subjects to be added:</strong>
+            <Box component="ul" sx={{ listStyle: "none",  mt: 2, p: 0, m: 0 }}>
+              {subjects.map((subj, idx) => (
+                <Box
+                  key={idx}
+                  component="li"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    mb: 1,
+                    p: 1,
+                    borderRadius: "8px",
+                    background: "#f7f7f7",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 22,
+                      height: 22,
+                      backgroundColor: subj.color,
+                      borderRadius: "50%",
+                      border: "1px solid #ccc",
+                      marginRight: 2,
+                      display: "inline-block",
+                    }}
+                  />
+                  <span style={{ fontWeight: 500, fontSize: "1rem", marginRight: 8 }}>{subj.name}</span>
+                  <span style={{ color: "#888", fontSize: "0.9rem" }}>{subj.color}</span>
+                </Box>
+              ))}
+            </Box>
           </Box>
         )}
       </DialogContent>
 
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+      <DialogActions sx={{ justifyContent: "space-between", px: 2, pb: 2 }}>
+        <Button onClick={onClose} variant="outlined" color="secondary" sx={{ minWidth: 100 }}>
+          Cancel
+        </Button>
         <Button
-          onClick={() => addNewSubject(subjectName, selectedColor)}
+          onClick={handleSubmitAll}
           variant="contained"
           color="primary"
+          disabled={subjects.length === 0}
+          sx={{ minWidth: 120 }}
         >
-          Add
+          Add All
         </Button>
       </DialogActions>
     </Dialog>

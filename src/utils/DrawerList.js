@@ -10,9 +10,6 @@ import { useGlobalContext } from "../context";
 import "./DrawerList.css";
 
 const styles = {
-  header: {
-    margin: "2em 1em 0em",
-  },
   listItemIcon: {
     marginBottom: "4px",
   },
@@ -25,22 +22,18 @@ const styles = {
 };
 
 const components = {
-  IITJLogs: "IITJ Logs",
-  Logs : "Vivek Logs",
-  Notes: "Vivek Notes",
-  CalculatorAdv: "Advance Calculator",
-  // MocktailApp: "Mocktails Info",
-  // Pokemons: "Pokemon Abilities",
-  // TourApp: "Tour Guide",
+  Home: "🏠 Home",
+  IITJLogs: "📚 IITJ Logs",
+  Logs : "📅 Logs",
+  Notes: "📝 Notes",
+  CalculatorAdv: "🧮 Calculator",
 };
 
 const DrawerList = () => {
   const { path, setPath } = useGlobalContext();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  const toggleSidebar = () =>  setIsSidebarOpen(!isSidebarOpen);
 
   const handleToggle = (nav) => () => {
     if (path === nav) {
@@ -55,7 +48,7 @@ const DrawerList = () => {
     <>
     <aside className={`left-menu ${isSidebarOpen ? 'open' : ''}`}>
       <div>
-        <h2 style={styles.header}>Vivek's Notes</h2>
+        <h2 className="header">Quick Drawer</h2>
         <List>
           {Object.keys(components).map((itr, index) => (
             <ListItem key={index}>
@@ -68,14 +61,6 @@ const DrawerList = () => {
                   primary={components[itr]}
                 />
               </ListItemButton>
-              <Switch
-                edge="end"
-                onChange={handleToggle(itr)}
-                checked={path === itr}
-                inputProps={{
-                  "aria-labelledby": `${itr}`,
-                }}
-              />
             </ListItem>
           ))}
         </List>
